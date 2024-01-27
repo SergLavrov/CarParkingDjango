@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cars list</title>
+</head>
+<body>
+    <h1>Cars list</h1>     {#Заголовок таблицы#}
+    <table>
+        <tr>
+            <th>Номер</th>
+            <th>Тип</th>
+            <th>Бренд</th>
+            <th>Год</th>
+            <th>явл. электр.</th>
+        </tr>
+        {% for car in cars %}
+        <tr>
+            <td>{{ car.car_number }}</td>
+            <td>{{ car.car_type.name }}</td>  {#car_type = models.ForeignKey(класс CarType / name #}
+            <td>{{ car.car_brand.name }}</td> {#car_brand = models.ForeignKey(класс CarBrand / name#}
+            <td>{{ car.year }}</td>
+            <td>
+                {% if car.is_electric %}
+                    Да
+                {% else %}
+                    Нет
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
