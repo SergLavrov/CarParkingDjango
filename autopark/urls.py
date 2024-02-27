@@ -1,7 +1,9 @@
 from django.urls import path, include
 from . import views
+from django.views.generic import RedirectView
 
 urlpatterns = [
+    path('', RedirectView.as_view(url='get-cars/', permanent=True)),
     path('initialize/', views.initialize, name='initialize'),
     path('get-cars/', views.get_cars, name='get-cars'),
     path('get-car-by-id/<int:car_id>/', views.get_car_by_id, name='get-car-by-id'),

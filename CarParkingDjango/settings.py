@@ -11,22 +11,30 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env()
+environ.Env.read_env()
+# 2 Вариант - можно указать путь к .env вручную !!!
+# environ.Env.read_env(env_file=str(BASE_DIR / 'CarParkingDjango' / '.env'))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-w*6*zpgbbv97$@+2=c_#qcsbm_g#l)i8cn%qpf3t06i2433ts$'
+SECRET_KEY = env('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False               # По умолчанию DEBUG = True !!!
+                            # Поменяли на False, чтобы обработать самим ошибку 404 - см.файл 404.html
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']           # Разрешенный хост. По умолчанию ALLOWED_HOSTS = []
+                             # Поменяли на ['*'], чтобы разрешить любые хосты !!!
 
 # Application definition
 
@@ -37,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'autopark'
+    'autopark',
+    'userAdmin',
 ]
 
 MIDDLEWARE = [
@@ -78,11 +87,11 @@ WSGI_APPLICATION = 'CarParkingDjango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': 'localhost',
-        'PORT': '5432',
-        'USER': 'postgres',
-        'PASSWORD': 'lavr1005',
-        'NAME': 'park_db',
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'NAME': env('DB_NAME'),
     }
 }
 
