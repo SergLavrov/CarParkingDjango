@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from .models import CarType, CarBrand, Car, ParkingSlot, Parking
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
 
@@ -194,7 +195,17 @@ def delete_car(request: HttpRequest, car_id: int):
 Для POST запросов извлекает детали автомобиля из запроса и сохраняет новый автомобиль в базу данных, затем перенаправляется на URL 'get-cars'.
 """
 
-def add_car(request):                      # Функция add_car принимает параметр request, который представляет запрос клиента
+
+@login_required  # декоратор, требующий аутентификации пользователя
+# @permission_required('car.p1')  # декоратор, требующий наличия определенных разрешений
+def add_car(request):  # Функция add_car принимает параметр request
+    """
+        Представление для добавления нового автомобиля в автопарк.
+        Обрабатывает как GET, так и POST запросы.
+        Для GET запросов извлекает список марок и типов автомобилей и рендерит шаблон 'add_car.html' с данными.
+        Для POST запросов извлекает детали автомобиля из запроса и сохраняет новый автомобиль в базу данных,
+        затем перенаправляется на URL 'get-cars'.
+    """
     if request.method == 'GET':               # Если запрос GET, то:
         brand_list = CarBrand.objects.all()   # функция извлекает все МАРКИ машин и их ТИПЫ
         type_list = CarType.objects.all()
@@ -204,7 +215,7 @@ def add_car(request):                      # Функция add_car приним
             'types': type_list              # выпадающего списка из всех МАРОК и ТИПОВ машин из models.py
         }
 
-        return render(request, 'autopark/add_car.html', data)  # функция render() возвозвращает шаблон 'add_car.html'
+        return render(request, 'autopark/add_car.html', data)  # функция render() возвращает шаблон 'add_car.html'
 
     if request.method == 'POST':
         car_number = request.POST.get('car_number')         # Если метод запроса равен 'POST', то функция

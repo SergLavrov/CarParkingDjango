@@ -22,6 +22,8 @@ class Car(models.Model):
     car_brand = models.ForeignKey(CarBrand, on_delete=models.SET_NULL, null=True)
     is_electric = models.BooleanField(default=False)
     year = models.IntegerField()
+    image = models.ImageField('/car_image/')  # картинка (путь до файла /car_image/)
+    file = models.FileField('car_file/')  # файл
 
 
 class Parking(models.Model):
@@ -40,3 +42,4 @@ class ParkingSlot(models.Model):
 
     class Meta:
         ordering = ['number']
+
